@@ -5,7 +5,7 @@ const Ckeditor = () => {
   const API_URl = 'https://noteyard-backend.herokuapp.com';
   const UPLOAD_ENDPOINT = 'api/blogs/uploadImg';
 
-  const uploadAdapter = (loader) => {
+  function uploadAdapter(loader) {
     return {
       upload: () => {
         return new Promise((resolve, reject) => {
@@ -27,22 +27,20 @@ const Ckeditor = () => {
         });
       },
     };
-  };
+  }
 
-  const uploadPlugin = (editor) => {
+  function uploadPlugin(editor) {
     editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
       return uploadAdapter(loader);
     };
-  };
+  }
   return (
     <div>
-      <p>Content:</p>
       <CKEditor
         config={{
           extraPlugins: [uploadPlugin],
         }}
         editor={Editor}
-        data="<p>Hello from CKEditor 5!</p>"
         onReady={(editor) => {
           // You can store the "editor" and use when it is needed.
           console.log('Editor is ready to use!', editor);
