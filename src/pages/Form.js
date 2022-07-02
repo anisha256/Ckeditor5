@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-// import Ckeditor from '../component/Ckeditor';
 import styled from 'styled-components';
 import Editor from 'ckeditor5-custom-build/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
+import axios from 'axios';
 
 const FormContainer = styled.section`
   margin: 40px;
@@ -43,7 +43,6 @@ const Form = () => {
     phone: '',
     content: '',
   });
-  console.log('formdata:', formData);
   const handleChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -52,13 +51,41 @@ const Form = () => {
   };
   const handleCkeditorState = (e, editor) => {
     const data = editor.getData();
-    setFormData.content = { data };
-    // console.log(data);
+    formData.content = data;
+    console.log('formdata:', formData);
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log('submitted');
+    console.log(formData);
+    // try {
+    //   const config = {
+    //     headers: {
+    //       'content-type': 'application/json',
+    //     },
+    //   };
+    //   await axios.post(
+    //     'http://loalhost:5000/api/',
+    //     formData,
+    //     config
+    //   );
+    //   console.log(formData);
+    //   setFormData({
+    //     title: '',
+    //     email: '',
+    //     phone: '',
+    //     content: '',
+    //   });
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  };
+
   return (
     <FormContainer>
       <h1>CONTACT FORM</h1>
-      <ContactForm>
+      <ContactForm onSubmit={handleSubmit}>
         <InputC>
           <label>Title</label>
           <Input
@@ -97,17 +124,16 @@ const Form = () => {
           <CKEditor
             config={{
               ckfinder: {
-                uploadUrl: '/uploads',
+                uploadUrl: 'http://loalhost:5000/api/file/upload',
               },
             }}
             editor={Editor}
-            onReady={(editor) => {
-              console.log('Editor is ready to use!', editor);
+            onReady={() => {
+              console.log('Editor is ready to use!');
             }}
             onChange={handleCkeditorState}
           />
         </InputC>
-
         <InputC>
           <Button type="submit">Submit</Button>
         </InputC>
